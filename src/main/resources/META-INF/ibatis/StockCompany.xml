@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * stockCompany
+ *
+ * Copyright (c) 2009 Hangzhou ValueSoft Inc., All rights reserved.
+ *
+ * This software is the confidential and proprietary information of
+ * ValueSoft Company. ("Confidential Information").  You shall not
+ * disclose such Confidential Information and shall use it only in
+ * accordance with the terms of the license agreement you entered into
+ * with ValueSoft.com.
+ * 
+ * Revision History
+ * Date      		Programmer       Notes
+ * 2013-12-29   	    juning		     Initial
+ **********************************************************************
+-->
+
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "/WEB-INF/sql-map-2.dtd">
+<sqlMap namespace="Stock_stockCompany">
+    
+    <typeAlias alias="stockCompanyVO" type="com.j.stock.vo.StockCompanyVO"/>
+
+    <resultMap id="stockCompanyResult" class="stockCompanyVO">
+        <result property="id" column="id"/>
+        <result property="company" column="company"/>
+        <result property="code" column="code"/>
+        <result property="dataStatus" column="data_status"/>
+        <result property="createdDate" column="created_date"/>
+        <result property="modifiedDate" column="modified_date"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="modifiedBy" column="modified_by"/>
+    </resultMap>
+	<select id="loadstockCompanyVOList" resultMap="stockCompanyResult" parameterClass="Map">
+	    <![CDATA[
+	    	select * from `stock_company`
+	    	where  data_status != 0 and code = #code# 
+	    ]]>
+    </select>
+    
+    <select id="loadstockCompanyVO" resultMap="stockCompanyResult" parameterClass="Map">
+	    <![CDATA[
+	    	select * from `stock_company`
+	    	where  data_status != 0 
+	    ]]>
+    </select>
+
+    <select id="countstockCompany" resultClass="Long" parameterClass="Map">
+	    <![CDATA[
+	    	select count(*) from `stock_company` 
+	    	where data_status!=0 and company_id = #companyId# and training_class_id = #trainingClassId#
+	    ]]>
+    </select>
+    
+    <select id="loadstockCompanyVOById" resultMap="stockCompanyResult" parameterClass="Long">
+	    <![CDATA[
+	    	select * from `stock_company` where id = #id#
+	    ]]>
+    </select>
+	
+	<insert id="insertstockCompanyVO" parameterClass="stockCompanyVO">
+	<![CDATA[
+		INSERT INTO `stock_company` ( 
+	            company ,
+	            code ,
+	            data_status ,
+	            created_date ,
+	            modified_date ,
+	            created_by ,
+	            modified_by 
+        )
+		VALUES( 
+        	    #company# ,
+        	    #code# ,
+        	    #dataStatus# ,
+        	    #createdDate# ,
+        	    #modifiedDate# ,
+        	    #createdBy# ,
+        	    #modifiedBy# 
+        )
+	]]>
+		<selectKey resultClass="long" keyProperty="id">  
+	      	<![CDATA[ SELECT LAST_INSERT_ID() AS ID ]]>   
+	  	</selectKey>
+	</insert>
+	
+	
+	<update id="updatestockCompanyVO" parameterClass="stockCompanyVO">
+	<![CDATA[
+	    UPDATE `stock_company` 
+	    SET 
+	        company = #company# ,
+	        code = #code# ,
+	        data_status = #dataStatus# ,
+	        created_date = #createdDate# ,
+	        modified_date = #modifiedDate# ,
+	        created_by = #createdBy# ,
+	        modified_by = #modifiedBy# 
+        WHERE
+	        id = #id#
+	]]>
+	</update>
+	
+	<update id="deletestockCompanys" parameterClass="Map">
+		<![CDATA[
+		    UPDATE `stock_company` set data_status = 0 ,
+	        modified_date = #modifiedDate# ,
+	        modified_by = #modifiedBy# 
+	         where id in (#idList#)
+		]]>
+	</update>
+	
+	<update id="deletestockCompanyVOById" parameterClass="Long">
+		<![CDATA[
+		    UPDATE `stock_company` set data_status = 0 ,
+	        modified_date = #modifiedDate# ,
+	        modified_by = #modifiedBy# 
+	         where id=#id#
+		]]>
+	</update>
+	
+	
+</sqlMap>

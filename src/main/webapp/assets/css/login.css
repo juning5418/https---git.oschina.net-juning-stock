@@ -1,0 +1,108 @@
+body {
+	background: url("../images/body-bj.jpg") no-repeat center -74px rgb(2, 72, 131); text-align: center; font-family: Georgia; font-size: 12px;
+}
+ul {
+	list-style: none; margin: 0px; padding: 0px;
+}
+li {
+	list-style: none; margin: 0px; padding: 0px;
+}
+.content {
+	margin: 74px auto 0px; width: 743px; height: 439px; text-align: left; position: relative; _margin-top: 60px;
+}
+* + html .content {
+	margin-top: 60px;
+}
+.content h1 {
+	background: url("../images/loginlogo.jpg") no-repeat; left: 72px; top: 142px; width: 233px; height: 128px; text-indent: -999999px; position: absolute;
+}
+.content .body {
+	top: 98px; width: 330px; right: 50px; position: absolute;
+}
+.content .body ul li {
+	margin: 5px 0px; padding: 3px 0px; overflow: hidden;
+}
+.default-style .body {
+	width: 353px;
+}
+.login-list label {
+	width: 71px; height: 30px; text-align: right; line-height: 30px; padding-right: 5px; float: left; display: block;
+}
+.account-title {
+	margin: 2px; padding: 0px 20px; height: 25px; line-height: 25px; font-size: 16px;
+}
+.account-title span {
+	color: rgb(0, 153, 255); margin-right: 2px;
+}
+#usrname {
+	background: url("../images/login-bj.png") no-repeat; padding: 0px 25px; border: currentColor; border-image: none; width: 197px; height: 30px; color: rgb(153, 153, 153); line-height: 30px;
+}
+#password {
+	background: url("../images/login-bj.png") no-repeat; padding: 0px 25px; border: currentColor; border-image: none; width: 197px; height: 30px; color: rgb(153, 153, 153); line-height: 30px;
+}
+#verifycode {
+	background: url("../images/login-bj.png") no-repeat; padding: 0px 25px; border: currentColor; border-image: none; width: 197px; height: 30px; color: rgb(153, 153, 153); line-height: 30px;
+}
+#account {
+	background: url("../images/login-bj.png") no-repeat; padding: 0px 25px; border: currentColor; border-image: none; width: 197px; height: 30px; color: rgb(153, 153, 153); line-height: 30px;
+}
+.default-style #account {
+	width: 120px;
+}
+.default-style #password {
+	width: 120px;
+}
+#verifycode {
+	padding: 0px 3px; width: 83px;
+}
+#verifycode {
+	background-position: 0px -89px;
+}
+.inputstylefocus#verifycode {
+	background-position: 0px -427px;
+}
+.inputstylefocus#usrname {
+	background-position: 0px -301px;
+}
+#account {
+	background-position: 0px -519px;
+}
+.default-style #password {
+	background-position: 0px -519px;
+}
+.inputstylefocus#account {
+	background-position: 0px -587px;
+}
+.default-style .inputstylefocus#password {
+	background-position: 0px -587px;
+}
+#password {
+	background-position: 0px -45px;
+}
+.inputstylefocus#password {
+	background-position: 0px -362px;
+}
+.login-list a {
+	color: rgb(102, 102, 102); text-decoration: none;
+}
+.login-list a:hover {
+	color: rgb(255, 102, 0); text-decoration: underline;
+}
+.content .loginbtn {
+	background: url("../images/login-bj.png") no-repeat 0px -180px; border: currentColor; border-image: none; width: 138px; height: 42px; text-indent: -9999px; cursor: pointer;
+}
+.content .body ul li.message {
+	background: url("../images/loginmsgbg.gif") no-repeat 77px 4px; padding: 0px 0px 0px 107px; height: 37px; line-height: 37px;
+}
+.rem-user {
+	margin-left: 76px; vertical-align: middle; float: left;
+}
+.login-list .rem-usermame label {
+	width: auto; height: 22px; line-height: 19px; display: inline;
+}
+.content .body ul li.btn {
+	padding-left: 76px;
+}
+.verifycodeimg {
+	left: 170px; top: 10px; width: 60px; height: 18px; position: absolute; _left: 92px;
+}

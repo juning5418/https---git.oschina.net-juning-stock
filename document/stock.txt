@@ -1,0 +1,10 @@
+VP6789  IP地址：142.4.109.185
+Windows默认帐户：Administrator
+密码：china3rBaw8qb
+
+mysql登录：
+http://142.4.109.185:999
+帐户：root
+密码：ch4ina7brb
+
+ftp  142.4.109.185    stock   123456l

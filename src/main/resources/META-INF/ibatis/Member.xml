@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Member
+ *
+ * Copyright (c) 2009 Hangzhou ValueSoft Inc., All rights reserved.
+ *
+ * This software is the confidential and proprietary information of
+ * ValueSoft Company. ("Confidential Information").  You shall not
+ * disclose such Confidential Information and shall use it only in
+ * accordance with the terms of the license agreement you entered into
+ * with ValueSoft.com.
+ * 
+ * Revision History
+ * Date      		Programmer       Notes
+ * 2013-06-03   	    chh		     Initial
+ **********************************************************************
+-->
+
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="stock_Member">
+    
+    <typeAlias alias="memberVO" type="com.j.stock.vo.MemberVO"/>
+
+    <resultMap id="memberResult" class="memberVO">
+        <result property="id" column="id"/>
+        <result property="integral" column="integral"/>
+        <result property="mobile" column="mobile"/>
+        <result property="email" column="email"/> 
+        <result property="barCode" column="bar_code"/>
+        <result property="password" column="password"/>
+        <result property="memberId" column="member_id"/>
+        <result property="nick" column="nick"/>
+       <result property="username" column="username"/> 
+        <result property="defProps" column="def_props"/>
+        <result property="idCard" column="id_card"/>
+        <result property="chName" column="ch_name"/>
+        <result property="engName" column="eng_name"/>
+        <result property="gender" column="gender"/>
+        <result property="birthday" column="birthday"/>
+        <result property="nation" column="nation"/>
+        <result property="nativePlace" column="native_place"/>
+        <result property="marriageStatus" column="marriage_status"/>
+        <result property="politicsStatus" column="politics_status"/>
+        <result property="phone" column="phone"/>
+        <result property="cornet" column="cornet"/>
+        <result property="msn" column="msn"/>
+        <result property="qq" column="qq"/>
+        <result property="education" column="education"/>
+        <result property="professional" column="professional"/>
+        <result property="graduationSchool" column="graduation_school"/>
+        <result property="address" column="address"/>
+        <result property="zipcode" column="zipcode"/>
+        <result property="userStatus" column="user_status"/>
+        <result property="sortOrder" column="sort_order"/>
+        <result property="headPortrait" column="head_portrait"/>
+        <result property="remark" column="remark"/>
+        <result property="dataStatus" column="data_status"/>
+        <result property="createdDate" column="created_date"/>
+        <result property="modifiedDate" column="modified_date"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="modifiedBy" column="modified_by"/>
+        <result property="companyId" column="company_id"/>
+        <result property="level" column="level"/>
+        <result property="address2" column="address2"/>
+        <result property="startDate" column="start_date"/>
+        <result property="validDate" column="valid_date"/>
+        <result property="memberFee" column="member_fee"/>
+        <result property="securityFee" column="security_fee"/>
+        <result property="hobbies" column="hobbies"/>
+         <result property="devicetoken" column="devicetoken"/>
+    </resultMap>
+    <resultMap id="memberResultExtend" class="memberVO" extends="memberResult">
+        <result property="levelName" column="levelName"  nullValue=""/>
+    </resultMap>
+	<select id="loadMemberVOList" resultMap="memberResultExtend" parameterClass="Map">
+	    	select distinct m.*,  dd.data_value levelName
+	    	 from `member` m 
+	    	 left join data_dictionary dd on m.level = dd.id
+	    	 where m.data_status != 0 and m.company_id = #companyId# 
+	    	 <isNotNull property="queryTitle">
+	   		     and ( m.ch_name like CONCAT('%',#queryTitle#,'%')
+	   		     or m.mobile like CONCAT('%',#queryTitle#,'%')
+	   		     or m.address like CONCAT('%',#queryTitle#,'%')
+	   		     or m.address2 like CONCAT('%',#queryTitle#,'%')
+	   		     or m.bar_code like CONCAT('%',#queryTitle#,'%'))
+	   		 </isNotNull>
+	    	 group by m.id
+    </select>
+
+    <select id="countMember" resultClass="Long" parameterClass="Map">
+	    	select count(DISTINCT m.id) from `member` m
+	    	where m.data_status!=0 and m.company_id = #companyId#
+	    	<isNotNull property="queryTitle">
+	   		     and ( m.ch_name like CONCAT('%',#queryTitle#,'%')
+	   		     or m.mobile like CONCAT('%',#queryTitle#,'%')
+	   		      or m.address like CONCAT('%',#queryTitle#,'%')
+	   		     or m.address2 like CONCAT('%',#queryTitle#,'%')
+	   		     or m.bar_code like CONCAT('%',#queryTitle#,'%'))
+	   		 </isNotNull>
+    </select>
+    
+    <select id="loadMemberVOById" resultMap="memberResult" parameterClass="Long">
+	    <![CDATA[
+	    	select * from `member` where id = #id# 
+	    ]]>
+    </select>
+    
+    <select id="loadMemberInfoByMobile" resultMap="memberResult" parameterClass="Long">
+	    <![CDATA[
+	    	select * from `member` where mobile = #mobile#
+	    ]]>
+    </select>
+    
+    <select id="loadMemberInfoById" resultMap="memberResultExtend" parameterClass="Long">
+	    <![CDATA[
+	    	select distinct m.*, dd.data_value levelName
+	    	from `member` m left join data_dictionary dd on m.level = dd.id
+	    	where m.id = #id# 
+	    	group by m.id
+	    ]]>
+    </select>
+    
+    <!-- 模糊查询会员名或者条形码 会员号或者手机  -->
+    <select id="loadByNameOrCode" resultMap="memberResultExtend" parameterClass="Map">
+	    <![CDATA[
+	    	select distinct m.*,  dd.data_value levelName
+	    	from `member` m left join data_dictionary dd on m.level = dd.id
+	    	where m.data_status != 0 and (
+	    	     m.ch_name like CONCAT('%',#queryTitle#,'%')
+	   		     or m.mobile like CONCAT('%',#queryTitle#,'%')
+	   		     or m.bar_code like CONCAT('%',#queryTitle#,'%'))
+	    	group by m.id
+	    ]]>
+    </select>
+    
+     <select id="checkMember" resultMap="memberResult" parameterClass="memberVO">
+	    <![CDATA[
+	    	select m.*   
+	    	from `member` m where m.username= #username# or   m.mobile  = #mobile# or m.email = #email#
+	    ]]>
+    </select>
+    
+    <select id="logonCheckMember" resultMap="memberResult" parameterClass="memberVO">
+	    <![CDATA[
+	    	select m.*   
+	    	from `member` m where m.username= #username# and  m.password  = #password# 
+	    ]]>
+    </select>
+    
+    <select id="countByNameOrCode" resultClass="Long" parameterClass="Map">
+	    <![CDATA[
+	    	select count(m.id)
+	    	from `member` m 
+	    	where m.data_status != 0 and (
+	    	     m.ch_name like CONCAT('%',#queryTitle#,'%')
+	   		     or m.mobile like CONCAT('%',#queryTitle#,'%')
+	   		     or m.bar_code like CONCAT('%',#queryTitle#,'%'))
+	    ]]>
+    </select>
+	
+	<insert id="insertMemberVO" parameterClass="memberVO">
+	<![CDATA[
+		INSERT INTO `member` ( 
+	            integral ,
+	            mobile ,
+	            email ,
+	            username,
+	            bar_code ,
+	            password ,
+	            member_id ,
+	            nick ,
+	            def_props ,
+	            id_card ,
+	            ch_name ,
+	            eng_name ,
+	            gender ,
+	            birthday ,
+	            nation ,
+	            native_place ,
+	            marriage_status ,
+	            politics_status ,
+	            phone ,
+	            cornet ,
+	            msn ,
+	            qq ,
+	            education ,
+	            professional ,
+	            graduation_school ,
+	            address ,
+	            zipcode ,
+	            user_status ,
+	            sort_order ,
+	            head_portrait ,
+	            remark ,
+	            data_status ,
+	            created_date ,
+	            modified_date ,
+	            created_by ,
+	            modified_by ,
+	            company_id ,
+	            level ,
+	            address2 ,
+	            start_date ,
+	            valid_date ,
+	            member_fee ,
+	            security_fee,
+	            hobbies,
+	            devicetoken
+        )
+		VALUES( 
+        	    #integral# ,
+        	    #mobile# ,
+        	    #email# ,
+        	    #username#,
+        	    #barCode# ,
+        	    #password# ,
+        	    #memberId# ,
+        	    #nick# ,
+        	    #defProps# ,
+        	    #idCard# ,
+        	    #chName# ,
+        	    #engName# ,
+        	    #gender# ,
+        	    #birthday# ,
+        	    #nation# ,
+        	    #nativePlace# ,
+        	    #marriageStatus# ,
+        	    #politicsStatus# ,
+        	    #phone# ,
+        	    #cornet# ,
+        	    #msn# ,
+        	    #qq# ,
+        	    #education# ,
+        	    #professional# ,
+        	    #graduationSchool# ,
+        	    #address# ,
+        	    #zipcode# ,
+        	    #userStatus# ,
+        	    #sortOrder# ,
+        	    #headPortrait# ,
+        	    #remark# ,
+        	    #dataStatus# ,
+        	    #createdDate# ,
+        	    #modifiedDate# ,
+        	    #createdBy# ,
+        	    #modifiedBy# ,
+        	    #companyId# ,
+        	    #level# ,
+        	    #address2# ,
+        	    #startDate# ,
+        	    #validDate# ,
+        	    #memberFee# ,
+        	    #securityFee#,
+        	    #hobbies#,
+        	    #devicetoken#
+        )
+	]]>
+		<selectKey resultClass="Long" keyProperty="id">  
+	      	<![CDATA[ SELECT LAST_INSERT_ID() AS ID ]]>   
+	  	</selectKey>
+	</insert>
+	
+	
+	<update id="updateMemberVO" parameterClass="memberVO">
+	<![CDATA[
+	    UPDATE `member` 
+	    SET 
+	        integral = #integral# ,
+	        mobile = #mobile# ,
+	        email = #email# ,
+	        bar_code = #barCode# ,
+	        password = #password# ,
+	        member_id = #memberId# ,
+	        nick = #nick# ,
+	        def_props = #defProps# ,
+	        id_card = #idCard# ,
+	        ch_name = #chName# ,
+	        eng_name = #engName# ,
+	        gender = #gender# ,
+	        birthday = #birthday# ,
+	        nation = #nation# ,
+	        native_place = #nativePlace# ,
+	        marriage_status = #marriageStatus# ,
+	        politics_status = #politicsStatus# ,
+	        phone = #phone# ,
+	        cornet = #cornet# ,
+	        msn = #msn# ,
+	        qq = #qq# ,
+	        education = #education# ,
+	        professional = #professional# ,
+	        graduation_school = #graduationSchool# ,
+	        address = #address# ,
+	        zipcode = #zipcode# ,
+	        user_status = #userStatus# ,
+	        sort_order = #sortOrder# ,
+	        head_portrait = #headPortrait# ,
+	        remark = #remark# ,
+	        data_status = #dataStatus# ,
+	        created_date = #createdDate# ,
+	        modified_date = #modifiedDate# ,
+	        created_by = #createdBy# ,
+	        modified_by = #modifiedBy# ,
+	        company_id = #companyId# ,
+	        level = #level# ,
+	        address2 = #address2# ,
+	        start_date = #startDate# ,
+	        valid_date = #validDate# ,
+	        member_fee = #memberFee# ,
+	        security_fee = #securityFee#,
+	        hobbies = #hobbies# 
+        WHERE
+	        id = #id#
+	]]>
+	</update>
+	
+	<update id="updateMemberToken" parameterClass="memberVO">
+		<![CDATA[
+		    UPDATE `member` set devicetoken = #devicetoken# 
+		    where id=#id#
+		]]>
+	</update>
+	
+	<update id="deleteMemberVO" parameterClass="memberVO">
+		<![CDATA[
+		    UPDATE `member` set data_status = 0 ,
+		     modified_date = #modifiedDate# ,
+		    modified_by = #modifiedBy#
+		    where id=#id#
+		]]>
+	</update>
+	
+	<update id="deleteMemberVOById" parameterClass="Long">
+		<![CDATA[
+		    UPDATE `member` set data_status = 0 ,
+		     modified_date = #modifiedDate# ,
+		    modified_by = #modifiedBy# where id=#id#
+		]]>
+	</update>
+	
+	
+</sqlMap>
